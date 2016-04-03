@@ -19,7 +19,7 @@ def dom_text_content(elem):
 	return re.sub(r'\s+', '-', etree.tostring(elem, method='text',encoding='unicode').strip())
 
 try:
-	visited_urls = set(open('urls.txt','r').split('\n'))
+	visited_urls = set(open('urls.txt','r').read().split('\n'))
 except Exception:
 	visited_urls = ()
 	
@@ -33,7 +33,7 @@ base_url = r'http://zu.fang.com/house/i%d%d/'
 hourse_dl_re = re.compile(r'<dl class="list hiddenMap rel">.+?</dl>',  re.S)
 
 
-fp = open('fj_%s.txt' % time.strftime('%Y%m%d'), 'w');
+fp = open('fj_%s.txt' % time.strftime('%Y%m%d'), 'a');
 
 for s in range(1,4):
 	for i in range(1,101):
@@ -53,6 +53,7 @@ for s in range(1,4):
 			href =  link.attrib['href']
 			
 			if href in visited_urls:
+				print 'found!' , href
 				continue
 			else:
 				save_url(href)
