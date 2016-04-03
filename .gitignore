@@ -1,3 +1,12 @@
+*.txt 
+*.dat
+*.html
+dl.html
+data.html
+fj.txt
+urls.txt
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -62,6 +71,3 @@ target/
 .ipynb_checkpoints
 
 
-# data file
-*.txt 
-*.dat
