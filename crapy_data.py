@@ -1,5 +1,6 @@
 import time
 import gzip
+import os
 import urllib, urllib2, re, smtplib, urlparse, time, threading
 from lxml import etree
 from StringIO import StringIO
@@ -18,10 +19,10 @@ def dom_text_content(elem):
 	
 	return re.sub(r'\s+', '-', etree.tostring(elem, method='text',encoding='unicode').strip())
 
-try:
-	visited_urls = set(open('urls.txt','r').read().split('\n'))
-except Exception:
-	visited_urls = ()
+	
+
+
+visited_urls = set()
 	
 def save_url(url):
 	f = open('urls.txt','a')
@@ -32,8 +33,14 @@ base_url = r'http://zu.fang.com/house/i%d%d/'
 
 hourse_dl_re = re.compile(r'<dl class="list hiddenMap rel">.+?</dl>',  re.S)
 
+outfile = 'fj_%s.txt' % time.strftime('%Y%m%d')
 
-fp = open('fj_%s.txt' % time.strftime('%Y%m%d'), 'a');
+if os.path.exists(outfile):
+	newday = False
+else:
+	newday = True
+	
+fp = open(outfile, 'a');
 
 for s in range(1,4):
 	for i in range(1,101):
@@ -46,7 +53,7 @@ for s in range(1,4):
 		dls = hourse_dl_re.findall(html)
 		
 		for dl in dls:
-			open('dl.html','w').write(dl)
+			#open('dl.html','w').write(dl)
 			T = get_dom_from_string(dl.decode('gbk','ignore'))
 			link = T.find('//p[@class="title"]/a')
 			title = link.attrib['title']
@@ -57,6 +64,7 @@ for s in range(1,4):
 				continue
 			else:
 				save_url(href)
+				visited_urls.add(href)
 				
 			
 			infos = dom_text_content(T.find('//p[@class="font16 mt20 bold"]'))
